@@ -1,7 +1,8 @@
 package com.aphamogged.pokedex
 
-import Screen.InicioPokedex
-import android.R.attr.contentDescription
+import android.R.attr.y
+import android.graphics.drawable.Icon
+import com.aphamogged.pokedex.Screen.HomePokedex
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,43 +10,40 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import com.aphamogged.pokedex.model.Pokemon
 import com.aphamogged.pokedex.ui.theme.PokedexTheme
-import kotlin.io.encoding.Base64
-import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +52,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PokedexTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomePokedex(modifier = Modifier.padding(innerPadding))
+                    Pokemon(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -62,92 +60,115 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomePokedex(modifier: Modifier = Modifier) {
-    var nomePokemon by remember{
-        mutableStateOf("")
-    }
+fun Pokemon(modifier: Modifier = Modifier) {
     Column(
-        modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier
+        .fillMaxSize()
+        .background(Color.Green)
     ) {
         Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(206, 31, 31, 255))
-            .padding(horizontal = 50.dp, vertical = 20.dp),
-
-            horizontalArrangement = Arrangement.spacedBy(15.dp),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                painter = painterResource(R.drawable.pokebola),
-                contentDescription = "Pokebola",
-                modifier = Modifier.size(35.dp)
-            )
-            Text(
-                text = "Pokédex",
-                color = Color.White,
-                fontSize = 32.sp
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(40.dp)
-                .padding(horizontal = 10.dp)
-                .border(width = 1.dp, Color.Red, shape = RoundedCornerShape(10.dp))
-        ) {
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = nomePokemon,
-                colors = TextFieldDefaults.colors(
-                    Color.White,
-                    Color.White,
-                ),
-                onValueChange = {
-                 nomePokemon = it
-                }
-            )
-            Button(
-                onClick = {}
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
-            }
-
-
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-        ) {
-
-            Card() {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
+                IconButton(
+                    onClick = {}
                 ) {
-                        Text(
-                            text = "0009"
-                        )
-
-                    Image(
-                        painter = painterResource(R.drawable.pokebola),
-                        contentDescription = "Pokebola",
-                        modifier = Modifier.size(35.dp)
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Voltar para home",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
                     )
-
-                        Text(
-                            text = "Nome",
-                            color =
-                        )
-
                 }
-
+                Text(
+                    text = "Pikachu",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight(700),
+                    color = Color.White
+                )
 
             }
+            Text(
+                text = "#001",
+                fontSize = 12.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Start
+            )
         }
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(10.dp)
+                    .background(Color.Transparent),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.pokebola),
+                    contentDescription = "Pokemon",
+                    modifier = Modifier
+                        .size(70.dp)
+                        .zIndex(1f)
+                        .offset(y = 20.dp),
+
+                    )
+                Card (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(2f),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 30.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(15.dp)
+                        ) {
+                            Button(onClick = {}) {
+                                Text(
+                                    text = "Tipo1",
+                                    color = Color.White
+                                )
+                            }
+                            Button(onClick = {}) {
+                                Text(
+                                    text = "Tipo1",
+                                    color = Color.White
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = "About",
+                            color = Color.Green,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        )
+                        Column() {
+                            Text("")
+                            Column() {
+                                Row() { }
+                            }
+                        }
+                    }
+
+                    }
+                }
+            }
 
     }
 
-}
+
+
+

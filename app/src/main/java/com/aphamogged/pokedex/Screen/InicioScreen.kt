@@ -1,4 +1,4 @@
-package Screen
+package com.aphamogged.pokedex.Screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
