@@ -35,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
+import com.aphamogged.pokedex.Componente.CardInfoPokemon
+import com.aphamogged.pokedex.Componente.Pokebola
+import com.aphamogged.pokedex.Componente.Voltar
 import com.aphamogged.pokedex.R
 
 @Composable
@@ -57,12 +60,7 @@ fun PokemonPokedex(navController: NavController) {
                 Alignment.Top,
 
                 ) {
-                Image(
-                    painter = painterResource(R.drawable.pokebola_logo),
-                    contentDescription = "Pokebola",
-                    modifier = Modifier.size(280.dp),
-                    alpha = 0.5f
-                )
+                Pokebola(280,R.drawable.pokebola_logo,0.5F)
             }
 
         }
@@ -79,18 +77,7 @@ fun PokemonPokedex(navController: NavController) {
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Voltar para home",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
+                    Voltar(navController)
                     Text(
                         text = "Pikachu",
                         fontSize = 24.sp,
@@ -122,235 +109,7 @@ fun PokemonPokedex(navController: NavController) {
                         .offset(y = 20.dp),
 
                     )
-                Card (
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 45.dp, horizontal = 10.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(15.dp)
-                        ) {
-                            Button(onClick = {}) {
-                                Text(
-                                    text = "Tipo1",
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            Button(onClick = {}) {
-                                Text(
-                                    text = "Tipo1",
-                                    color = Color.White
-                                )
-                            }
-                        }
-
-                        Text(
-                            text = "About",
-                            color = Color.Green,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
-                        )
-                        Row(
-                            modifier = Modifier.fillMaxWidth().weight(0.190f),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceAround
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxHeight().padding(top = 3.dp),
-                                Arrangement.SpaceBetween,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                ) {
-                                    Text(
-                                        text =  "6,9 Kg",
-                                        color = Color.Black
-                                    )
-                                }
-                                Text(
-                                    text = "Weigtht",
-                                    color = Color.Black,
-                                    fontSize = 12.sp
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.background(Color(229, 224, 224, 255)).width(1.dp).fillMaxHeight()
-                            ) {}
-                            Column(
-                                modifier = Modifier.fillMaxHeight().padding(top = 3.dp),
-                                Arrangement.SpaceBetween,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row() {
-                                    Text(
-                                        text = "0,7 m",
-                                        color = Color.Black
-                                    )
-                                }
-                                Text(
-                                    text = "Height",
-                                    color = Color.Black,
-                                    fontSize = 12.sp
-                                )
-                            }
-                            Row(
-                                modifier = Modifier.background(Color(229, 224, 224, 255)).width(1.dp).fillMaxHeight()
-                            ) {}
-                            Column(
-                                modifier = Modifier.fillMaxHeight().padding(top = 3.dp),
-                                Arrangement.SpaceBetween,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Chlorophyll",
-                                    color = Color.Black
-                                )
-                                Text(
-                                    text = "Overgraw",
-                                    color = Color.Black
-                                )
-                                Text(
-                                    text = "Moves",
-                                    color = Color.Black,
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "There is a plant seed on its back right from the day this Pokémon is born. The seed slowly grows larger.",
-                            textAlign = TextAlign.Start,
-                            color = Color.Black
-                        )
-                        Column(
-                            modifier = Modifier.weight(0.525F),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
-                        ) {
-                            Text(
-                                text =  "Base Stats",
-                                color = Color.Green,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp
-                            )
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 10.dp),
-                                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxHeight(),
-                                    verticalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Text(
-                                        text =  "HP",
-                                        color = Color.Green
-                                    )
-                                    Text(
-                                        text = "ATK",
-                                        color = Color.Green
-                                    )
-                                    Text(
-                                        text = "DEF",
-                                        color = Color.Green
-                                    )
-                                    Text(
-                                        text = "SATK",
-                                        color = Color.Green
-                                    )
-                                    Text(
-                                        text = "SDEF",
-                                        color = Color.Green
-                                    )
-                                    Text(
-                                        text = "SPD",
-                                        color = Color.Green
-                                    )
-                                }
-                                Row(
-                                    modifier = Modifier.background(Color(229, 224, 224, 255)).width(1.dp).fillMaxHeight()
-                                ) {}
-                                Row() {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .weight(1F)
-                                            .padding(horizontal = 5.dp),
-                                        verticalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                                        ) {
-                                            Text(
-                                                text = "045",
-                                                color = Color.Black
-                                            )
-                                            Column(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .height(10.dp)
-                                                    .clip(RoundedCornerShape(10.dp))
-                                                    .background(Color.Green),
-                                            ) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .width(20.dp)
-                                                        .background(Color.Green)
-                                                        .fillMaxHeight()
-                                                ) { }
-                                            }
-                                        }
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                                        ) {
-                                            Text(
-                                                text = "045",
-                                                color = Color.Black
-                                            )
-                                            Column(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .height(10.dp)
-                                                    .clip(RoundedCornerShape(10.dp))
-                                                    .background(Color(229, 224, 224, 255))
-                                            ) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .width(20.dp)
-                                                        .background(Color.Green)
-                                                        .fillMaxHeight()
-
-                                                ) { }
-                                            }
-                                        }
-
-
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-
-
-                }
+                CardInfoPokemon()
 
             }
         }

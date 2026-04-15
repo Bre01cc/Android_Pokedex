@@ -20,7 +20,7 @@ fun Voltar(navController: NavController) {
     ) {
         Icon(
             imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Voltar para inicio",
+            contentDescription = "Voltar para tela anterior",
             tint = Color.White,
             modifier = Modifier.size(30.dp)
         )

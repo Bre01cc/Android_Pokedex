@@ -9,10 +9,12 @@ import androidx.compose.ui.unit.dp
 import com.aphamogged.pokedex.R
 
 @Composable
-fun Pokebola(tamanho: Int) {
+fun Pokebola(tamanho: Int, imagem : Int, opacidade : Float) {
+
     Image(
-        painter = painterResource(R.drawable.pokebola),
+        painter = painterResource(imagem),
         contentDescription = "Pokebola",
-        modifier = Modifier.size(tamanho.dp)
+        modifier = Modifier.size(tamanho.dp) ,
+        alpha = opacidade
     )
 }

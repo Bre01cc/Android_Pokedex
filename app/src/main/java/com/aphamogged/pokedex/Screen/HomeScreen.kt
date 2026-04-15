@@ -1,5 +1,6 @@
 package com.aphamogged.pokedex.Screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +14,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -28,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,15 +45,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.aphamogged.pokedex.Componente.CardPokemon
+import com.aphamogged.pokedex.Componente.Pokebola
 import com.aphamogged.pokedex.Componente.Voltar
+import com.aphamogged.pokedex.Pokemon.PokemonViewModel
 import com.aphamogged.pokedex.R
+import com.aphamogged.pokedex.model.Pokemon
+import com.aphamogged.pokedex.service.RetrofitFactory
+import kotlinx.coroutines.launch
 
 @Composable
-fun HomePokedex( navController: NavController) {
+fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
+    val scope = rememberCoroutineScope()
+    var pokemons by remember {
+        mutableStateOf(listOf<Pokemon>())
+    }
     var nomePokemon by remember{
         mutableStateOf("")
     }
+
+        viewModel.listaPokemon()
+        pokemons = viewModel.pokemons
+
     Column(
         modifier= Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -61,11 +84,7 @@ fun HomePokedex( navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Voltar(navController)
-            Image(
-                painter = painterResource(R.drawable.pokebola),
-                contentDescription = "Pokebola",
-                modifier = Modifier.size(35.dp)
-            )
+            Pokebola(35, R.drawable.pokebola, 1F)
             Text(
                 text = "Pokédex",
                 color = Color.White,
@@ -99,7 +118,10 @@ fun HomePokedex( navController: NavController) {
                 }
             )
             IconButton(
-                onClick = {}
+                onClick = {
+
+
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -109,14 +131,22 @@ fun HomePokedex( navController: NavController) {
             }
 
         }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-        ) {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(130.dp)
+        ){
 
-
+            items(pokemons){
+                CardPokemon()
+            }
         }
+//        LazyGridScope(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 10.dp)
+//        ) {
+//
+//
+//        }
     }
 
 }

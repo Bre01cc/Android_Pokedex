@@ -49,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
                   val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = "inicio"
+                        startDestination = "home"
                     ){
                         composable(
                             route = "inicio"
@@ -77,7 +78,7 @@ class MainActivity : ComponentActivity() {
                         composable(
                             route = "home"
                         ){
-                          HomePokedex(navController)
+                          HomePokedex(navController, viewModel = viewModel())
                         }
                         composable(
                             route = "pokemon"

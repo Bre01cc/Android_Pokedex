@@ -13,6 +13,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,9 +27,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.aphamogged.pokedex.Componente.Pokebola
 import com.aphamogged.pokedex.R
+import com.aphamogged.pokedex.model.Pokemon
 
 @Composable
 fun InicioPokedex(navController: NavController) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +50,9 @@ fun InicioPokedex(navController: NavController) {
                 fontSize = 32.sp,
                 color = Color.White
             )
-            Pokebola(125)
+
+            Pokebola(125, R.drawable.pokebola,1F)
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
