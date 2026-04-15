@@ -19,12 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.aphamogged.pokedex.Componente.Pokebola
 import com.aphamogged.pokedex.R
 
 @Composable
-fun InicioPokedex(modifier: Modifier = Modifier) {
+fun InicioPokedex(navController: NavController) {
     Column(
-        modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(Color(233, 30, 99, 255)),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -41,11 +43,7 @@ fun InicioPokedex(modifier: Modifier = Modifier) {
                 fontSize = 32.sp,
                 color = Color.White
             )
-            Image(
-                painter = painterResource(R.drawable.pokebola),
-                contentDescription = "Pokebola",
-                modifier = Modifier.size(125.dp)
-            )
+            Pokebola(125)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -55,7 +53,7 @@ fun InicioPokedex(modifier: Modifier = Modifier) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-
+                        navController.navigate("home")
                     },
                     colors = ButtonDefaults.buttonColors(
                         Color(43, 134, 175, 255)

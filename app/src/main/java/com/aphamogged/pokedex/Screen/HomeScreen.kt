@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,20 +31,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.aphamogged.pokedex.Componente.Voltar
 import com.aphamogged.pokedex.R
 
 @Composable
-fun HomePokedex(modifier: Modifier = Modifier) {
+fun HomePokedex( navController: NavController) {
     var nomePokemon by remember{
         mutableStateOf("")
     }
     Column(
-        modifier.fillMaxSize(),
+        modifier= Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
@@ -51,11 +55,12 @@ fun HomePokedex(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(206, 31, 31, 255))
-                .padding(horizontal = 50.dp, vertical = 20.dp),
+                .padding(horizontal = 10.dp, vertical = 35.dp),
 
             horizontalArrangement = Arrangement.spacedBy(15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Voltar(navController)
             Image(
                 painter = painterResource(R.drawable.pokebola),
                 contentDescription = "Pokebola",
@@ -71,7 +76,8 @@ fun HomePokedex(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp)
-                .border(width = 1.dp, Color.Red, shape = RoundedCornerShape(10.dp))
+                .clip(shape = RoundedCornerShape(10.dp))
+                .border(width = 3.dp, color = Color.Red, shape = RoundedCornerShape(10.dp))
                 .background(Color.White),
             Arrangement.SpaceBetween
         ) {
@@ -81,6 +87,9 @@ fun HomePokedex(modifier: Modifier = Modifier) {
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
+
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
 
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent
