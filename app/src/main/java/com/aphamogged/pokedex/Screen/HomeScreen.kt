@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,12 +27,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,6 +56,8 @@ import com.aphamogged.pokedex.Componente.Voltar
 import com.aphamogged.pokedex.Pokemon.PokemonViewModel
 import com.aphamogged.pokedex.R
 import com.aphamogged.pokedex.model.Pokemon
+import com.aphamogged.pokedex.model.PokemonEspeciesGen
+import com.aphamogged.pokedex.model.PokemonGen
 import com.aphamogged.pokedex.service.RetrofitFactory
 import kotlinx.coroutines.launch
 
@@ -60,13 +65,15 @@ import kotlinx.coroutines.launch
 fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
     val scope = rememberCoroutineScope()
     var pokemons by remember {
-        mutableStateOf(listOf<Pokemon>())
+        mutableStateOf(emptyList<Pokemon>())
     }
     var nomePokemon by remember{
         mutableStateOf("")
     }
-
+    LaunchedEffect(Unit) {
         viewModel.listaPokemon()
+    }
+
         pokemons = viewModel.pokemons
 
     Column(
@@ -131,22 +138,31 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
             }
 
         }
+
+        if (pokemons.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(130.dp)
+            modifier = Modifier.padding(10.dp),
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ){
 
-            items(pokemons){
-                CardPokemon()
+            items(pokemons.sortedBy { it.numero.toInt() }){
+
+                CardPokemon(nome = it.name, numero = it.numero,img = it.img){
+                    navController.navigate("pokemon")
+                }
+
             }
         }
-//        LazyGridScope(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 10.dp)
-//        ) {
-//
-//
-//        }
+        }
     }
 
 }

@@ -1,11 +1,24 @@
 package com.aphamogged.pokedex.model
 
-import com.google.gson.annotations.SerializedName
+data class PokemonEspeciesGen (
+    val name: String,
+    val url: String,
+)
 
-data class Pokemon (
-    @SerializedName("name")  val nome: String = "",
-    @SerializedName("entry_number") val numeroDex: String = "",
-    @SerializedName("url")    val url: String = "",
-){
+data class Pokemon(
+    val name: String,
+    val img: String,
+    val numero: String
+)
 
-}
+data class PokemonGen(
+    val pokemon_species: List<PokemonEspeciesGen>
+)
+
+data class PokemonResponse(
+    val sprites: Sprites
+)
+
+data class Sprites (
+    val front_default: String
+)

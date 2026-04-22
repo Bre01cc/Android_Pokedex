@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.aphamogged.pokedex.Componente.Pokebola
 import com.aphamogged.pokedex.R
-import com.aphamogged.pokedex.model.Pokemon
 
 @Composable
 fun InicioPokedex(navController: NavController) {

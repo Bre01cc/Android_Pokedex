@@ -1,6 +1,5 @@
 package com.aphamogged.pokedex.service
 
-import com.aphamogged.pokedex.model.Pokemon
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.jvm.java

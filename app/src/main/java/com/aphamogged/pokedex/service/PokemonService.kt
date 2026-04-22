@@ -1,14 +1,20 @@
 package com.aphamogged.pokedex.service
 
-import com.aphamogged.pokedex.model.Pokemon
+import com.aphamogged.pokedex.model.PokemonGen
+import com.aphamogged.pokedex.model.PokemonResponse
+import com.aphamogged.pokedex.model.Sprites
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface PokemonService {
-    @GET("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=10")
+    @GET("generation/{regiao}")
     suspend fun getPokemonByRegion(
-//        @Path(value = "inicio") inicio: String,
-//        @Path(value = "fim") fim: String
-    ): List<Pokemon>
+        @Path(value = "regiao") regiao: String,
+    ): PokemonGen
+
+    @GET("pokemon/{numeroPokedex}")
+    suspend fun getDataByNumberPokemon(
+        @Path(value = "numeroPokedex") numeroPokedex: String,
+    ): PokemonResponse
 }
 

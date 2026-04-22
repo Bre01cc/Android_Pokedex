@@ -55,7 +55,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aphamogged.pokedex.Screen.InicioPokedex
 import com.aphamogged.pokedex.Screen.PokemonPokedex
-import com.aphamogged.pokedex.model.Pokemon
 import com.aphamogged.pokedex.ui.theme.PokedexTheme
 
 class MainActivity : ComponentActivity() {
@@ -68,7 +67,7 @@ class MainActivity : ComponentActivity() {
                   val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = "home"
+                        startDestination = "inicio"
                     ){
                         composable(
                             route = "inicio"
