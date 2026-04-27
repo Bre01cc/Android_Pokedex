@@ -58,12 +58,13 @@ import com.aphamogged.pokedex.R
 import com.aphamogged.pokedex.model.Pokemon
 import com.aphamogged.pokedex.model.PokemonEspeciesGen
 import com.aphamogged.pokedex.model.PokemonGen
+import com.aphamogged.pokedex.model.TipoPokemon
 import com.aphamogged.pokedex.service.RetrofitFactory
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
-    val scope = rememberCoroutineScope()
+
     var pokemons by remember {
         mutableStateOf(emptyList<Pokemon>())
     }
@@ -126,7 +127,7 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
             )
             IconButton(
                 onClick = {
-
+            pokemons = viewModel.pesquisaPokemon(nomePokemon)
 
                 }
             ) {
@@ -155,11 +156,10 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
         ){
 
             items(pokemons.sortedBy { it.numero.toInt() }){
-
-                CardPokemon(nome = it.name, numero = it.numero,img = it.img){
-                    navController.navigate("pokemon")
+                val colorPokemon = TipoPokemon.valueOf("${it.tipos[0].type.name.uppercase()}");
+                CardPokemon(nome = it.name,viewModel, numero = it.numero,cor = colorPokemon,img = it.img){
+                    navController.navigate("pokemon/${it.numero}")
                 }
-
             }
         }
         }

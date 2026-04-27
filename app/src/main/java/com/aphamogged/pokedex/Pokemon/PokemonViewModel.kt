@@ -12,58 +12,120 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aphamogged.pokedex.model.Pokemon
 import com.aphamogged.pokedex.model.PokemonEspeciesGen
 import com.aphamogged.pokedex.model.PokemonGen
+import com.aphamogged.pokedex.model.PokemonResponse
 import com.aphamogged.pokedex.service.RetrofitFactory
 import com.google.gson.Gson
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.serialization.descriptors.StructureKind
 
 class PokemonViewModel : ViewModel(){
     private var _pokemons by mutableStateOf(emptyList<Pokemon>())
     val pokemons  get() = _pokemons
 
+    private  var _pokemon by  mutableStateOf<Pokemon?>(null)
+
+    val pokemon get() = _pokemon
     private var _imgPokemons by mutableStateOf(mutableListOf<String>())
 
     val imgPokemons get() = _imgPokemons
 
 
-     fun listaPokemon(){
+
+    fun listaPokemon(){
         viewModelScope.launch {
             try {
                 var response = RetrofitFactory().getPokemonService().getPokemonByRegion("1")
 
 
-              val lista =  response.pokemon_species.map{
-                  async {
-                      val numero = numberPokemon(it.url)
+                val lista =  response.pokemon_species.map{
+                    async {
+                        val numero = numberPokemon(it.url)
 
-                      val img = try {
-                          var sprites = RetrofitFactory()
-                              .getPokemonService()
-                              .getDataByNumberPokemon(numero)
-                          sprites.sprites.front_default
-                      }catch (e: Exception){
-                          Log.e("Errro", e.message ?: "Erro na requisição da imagem")
-                      }
-
-                      Pokemon(
-                          numero = numero,
-                          name = it.name,
-                          img = img.toString()
-                      )
-                  }
+                        val pokemon =  buscarDadosPokemon(numero)
+                        Log.e("Teste", pokemon!!.abilities.toString())
+                        Pokemon(
+                            numero = numero,
+                            name = formatarNome(pokemon!!.forms!![0].name) ,
+                            img = pokemon!!.sprites!!.front_default!!,
+                            tipos = pokemon!!.types!!,
+                            status = pokemon!!.stats!!,
+                            weight = formatarNumeroPoke(pokemon!!.weight.toString()),
+                            height = formatarNumeroPoke(pokemon!!.height.toString()),
+                            abilities = pokemon!!.abilities
+                        )
+                    }
                 }
-
                 _pokemons = lista.awaitAll()
 
             }catch (e : Exception){
-                Log.e("Errro", e.message ?: "Erro na requisição da geração")
+                Log.e("Erro", e.message ?: "Erro na requisição da geração")
             }
         }
     }
+
+   suspend fun buscarDadosPokemon(numero: String): PokemonResponse?{
+        return try {
+            RetrofitFactory()
+                .getPokemonService()
+                .getDataByNumberPokemon(numero)
+
+        }catch (e: Exception){
+            Log.e("Teste", e.message ?: "Erro na requisição do pokemon")
+            null
+            }
+        }
+
     fun numberPokemon(url: String): String{
-       return url.removeSuffix("/").split("/").last()
+         return url.removeSuffix("/").split("/").last()
+        }
+
+    fun buscarPokemon(numero: String){
+        viewModelScope.launch {
+            try {
+                Log.e("Teste", numero)
+                var dadosPokemon = buscarDadosPokemon(numero)
+                _pokemon = Pokemon(
+                    name =formatarNome(dadosPokemon!!.forms!![0].name),
+                    img = dadosPokemon!!.sprites.front_default,
+                    numero = numero,
+                    tipos = dadosPokemon!!.types,
+                    status = dadosPokemon!!.stats,
+                    weight = formatarNumeroPoke(dadosPokemon!!.weight.toString()),
+                    height = formatarNumeroPoke(dadosPokemon!!.height.toString()),
+                    abilities = dadosPokemon!!.abilities
+                )
+            }catch (e : Exception){
+                Log.e("Teste", e.message ?: "Erro na busca do pokemon")
+                }
+            }
+
+         }
+    fun formatarNumeroPoke(numero: String) : String{
+        var numeroDecimal = numero.toDouble()/100
+        var  numeroFormatado = numeroDecimal.toString().replace(".",",")
+
+        return  numeroFormatado
     }
 
+    fun formatarNome(name : String): String{
+        var nomeFormatado = name[0].uppercase() + name.substring(1)
+        return  nomeFormatado
+    }
+
+    fun pesquisaPokemon (nome: String) : List<Pokemon>{
+    return  _pokemons.filter {
+        pokemon ->
+        pokemon.name.startsWith(nome,ignoreCase = true)
+    }
+    }
 }
+
+
+
+
+
+
+
 

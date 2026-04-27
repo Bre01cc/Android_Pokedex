@@ -50,9 +50,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.aphamogged.pokedex.Screen.InicioPokedex
 import com.aphamogged.pokedex.Screen.PokemonPokedex
 import com.aphamogged.pokedex.ui.theme.PokedexTheme
@@ -67,7 +69,7 @@ class MainActivity : ComponentActivity() {
                   val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = "inicio"
+                        startDestination = "home"
                     ){
                         composable(
                             route = "inicio"
@@ -80,9 +82,16 @@ class MainActivity : ComponentActivity() {
                           HomePokedex(navController, viewModel = viewModel())
                         }
                         composable(
-                            route = "pokemon"
+                            route = "pokemon/{id}",
+                            arguments = listOf(
+                                navArgument("id"){
+                                    type = NavType.IntType
+                                }
+                            )
                         ){
-                            PokemonPokedex(navController)
+                            rota ->
+                            val id = rota.arguments?.getInt("id")?:0
+                            PokemonPokedex(navController,viewModel = viewModel(), id = id)
                         }
                     }
                 }

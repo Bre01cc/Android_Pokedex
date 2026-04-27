@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun NivelAtributo(valor:Int) {
+fun NivelAtributo(valor:Int, cor : Long) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -37,7 +37,7 @@ fun NivelAtributo(valor:Int) {
             Column(
                 modifier = Modifier
                     .width(valor.dp)
-                    .background(Color.Green)
+                    .background(Color(cor))
                     .fillMaxHeight()
 
             ) {}

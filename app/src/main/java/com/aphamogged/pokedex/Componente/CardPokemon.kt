@@ -31,16 +31,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.aphamogged.pokedex.Pokemon.PokemonViewModel
 import com.aphamogged.pokedex.R
+import com.aphamogged.pokedex.model.TipoPokemon
 
 @Composable
-fun CardPokemon(nome : String, numero: String , img: String , onClick: () -> Unit) {
+fun CardPokemon(nome : String,viewModel: PokemonViewModel, numero: String ,cor : TipoPokemon,img: String , onClick: () -> Unit) {
 
         Card(
             modifier = Modifier
                 .width(200.dp)
                 .height(200.dp)
                 .clickable { onClick() }
-                .border(width = 1.dp, Color.Red, shape = RoundedCornerShape(10.dp)),
+                .border(width = 1.dp, Color(cor.colorType), shape = RoundedCornerShape(10.dp)),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
             ),
@@ -56,7 +57,8 @@ fun CardPokemon(nome : String, numero: String , img: String , onClick: () -> Uni
                         .padding(horizontal = 5.dp)
                         .fillMaxWidth(),
                     textAlign = TextAlign.End,
-                    text = "#$numero"
+                    text = "#$numero",
+                    color = Color(cor.colorType)
                 )
                 Column(
                     modifier = Modifier
@@ -66,20 +68,25 @@ fun CardPokemon(nome : String, numero: String , img: String , onClick: () -> Uni
                     AsyncImage(
                         model = img,
                         contentDescription = null,
-                        modifier = Modifier.size(120.dp)
+                        modifier = Modifier.size(140.dp)
 
                     )
                 }
-                Text(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(40.dp)
-                        .background(Color.Red),
-                    textAlign = TextAlign.Center,
-                    text = "$nome",
-                    fontSize = 16.sp,
-                    color = Color.White
-                )
+                        .height(50.dp)
+                        .background(Color(cor.colorType)),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "$nome",
+                        fontSize = 16.sp,
+                        color = Color.White
+                    )
+                }
+
             }
 
         }
