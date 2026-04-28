@@ -18,7 +18,15 @@ data class Pokemon(
     val tipos : List<Types>,
     val status : List<Status>,
     val height : String,
-    val weight : String
+    val weight : String,
+    val pokemonSpecie : PokemonSpecie? = null
+)
+
+data class PokemonSpecie(
+    val flavor_text_entries: List<DescricaoGamesPoke>
+)
+data class DescricaoGamesPoke(
+    val flavor_text : String
 )
 //especies de pokemons de uma geração
 data class PokemonGen(
@@ -76,13 +84,4 @@ data class Types(
 )
 data class Sprites (
     val front_default: String
-)
-
-
-data class PokemonEspicies(
-    val flavor_text_entries: List<DescricaoGamesPoke>
-)
-
-data class DescricaoGamesPoke(
-    val flavor_text : String
 )

@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
 fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
 
     var pokemons by remember {
-        mutableStateOf(emptyList<Pokemon>())
+        mutableStateOf<List<Pokemon?>>(emptyList())
     }
     var nomePokemon by remember{
         mutableStateOf("")
@@ -74,8 +74,8 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
     LaunchedEffect(Unit) {
         viewModel.listaPokemon()
     }
-
         pokemons = viewModel.pokemons
+
 
     Column(
         modifier= Modifier.fillMaxSize().background(Color.White),
@@ -140,7 +140,7 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
 
         }
 
-        if (pokemons.isEmpty()) {
+        if (viewModel.listaStatus) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -155,9 +155,9 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ){
 
-            items(pokemons.sortedBy { it.numero.toInt() }){
-                val colorPokemon = TipoPokemon.valueOf("${it.tipos[0].type.name.uppercase()}");
-                CardPokemon(nome = it.name,viewModel, numero = it.numero,cor = colorPokemon,img = it.img){
+            items(pokemons.sortedBy { it!!.numero.toInt() }){
+                val colorPokemon = TipoPokemon.valueOf("${it!!.tipos[0].type.name.uppercase()}");
+                CardPokemon(nome = it!!.name,viewModel, numero = it.numero,cor = colorPokemon,img = it.img){
                     navController.navigate("pokemon/${it.numero}")
                 }
             }

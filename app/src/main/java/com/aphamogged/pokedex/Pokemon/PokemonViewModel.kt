@@ -13,6 +13,7 @@ import com.aphamogged.pokedex.model.Pokemon
 import com.aphamogged.pokedex.model.PokemonEspeciesGen
 import com.aphamogged.pokedex.model.PokemonGen
 import com.aphamogged.pokedex.model.PokemonResponse
+import com.aphamogged.pokedex.model.PokemonSpecie
 import com.aphamogged.pokedex.service.RetrofitFactory
 import com.google.gson.Gson
 import kotlinx.coroutines.async
@@ -23,6 +24,10 @@ import kotlinx.serialization.descriptors.StructureKind
 class PokemonViewModel : ViewModel(){
     private var _pokemons by mutableStateOf(emptyList<Pokemon>())
     val pokemons  get() = _pokemons
+
+
+    private var _listaStatus by mutableStateOf(true)
+    val listaStatus get() = _listaStatus
 
     private  var _pokemon by  mutableStateOf<Pokemon?>(null)
 
@@ -57,6 +62,7 @@ class PokemonViewModel : ViewModel(){
                         )
                     }
                 }
+                _listaStatus = false
                 _pokemons = lista.awaitAll()
 
             }catch (e : Exception){
@@ -77,6 +83,18 @@ class PokemonViewModel : ViewModel(){
             }
         }
 
+    suspend fun buscarDadosEspecie(numero: String): PokemonSpecie?{
+        return try {
+            RetrofitFactory()
+                .getPokemonService()
+                .getDataByNumberEspecies(numero)
+
+        }catch (e: Exception){
+            Log.e("Teste", e.message ?: "Erro na requisição do pokemon")
+            null
+        }
+    }
+
     fun numberPokemon(url: String): String{
          return url.removeSuffix("/").split("/").last()
         }
@@ -84,8 +102,9 @@ class PokemonViewModel : ViewModel(){
     fun buscarPokemon(numero: String){
         viewModelScope.launch {
             try {
-                Log.e("Teste", numero)
+//                Log.e("Teste", numero)
                 var dadosPokemon = buscarDadosPokemon(numero)
+                var dadosEspecies = buscarDadosEspecie(numero)
                 _pokemon = Pokemon(
                     name =formatarNome(dadosPokemon!!.forms!![0].name),
                     img = dadosPokemon!!.sprites.front_default,
@@ -94,7 +113,8 @@ class PokemonViewModel : ViewModel(){
                     status = dadosPokemon!!.stats,
                     weight = formatarNumeroPoke(dadosPokemon!!.weight.toString()),
                     height = formatarNumeroPoke(dadosPokemon!!.height.toString()),
-                    abilities = dadosPokemon!!.abilities
+                    abilities = dadosPokemon!!.abilities,
+                    pokemonSpecie = dadosEspecies!!
                 )
             }catch (e : Exception){
                 Log.e("Teste", e.message ?: "Erro na busca do pokemon")
@@ -115,9 +135,9 @@ class PokemonViewModel : ViewModel(){
     }
 
     fun pesquisaPokemon (nome: String) : List<Pokemon>{
-    return  _pokemons.filter {
-        pokemon ->
-        pokemon.name.startsWith(nome,ignoreCase = true)
+         return   _pokemons.filter {
+                 pokemon ->
+             pokemon.name.startsWith(nome,ignoreCase = true)
     }
     }
 }

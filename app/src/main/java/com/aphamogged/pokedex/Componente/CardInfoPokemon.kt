@@ -132,8 +132,7 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
             }
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "There is a plant seed on its back right from the day this Pokémon is born. The seed slowly grows larger.",
-                textAlign = TextAlign.Start,
+                text = "${pokemon.pokemonSpecie!!.flavor_text_entries[0].flavor_text}",
                 color = Color.Black
             )
             Column(
