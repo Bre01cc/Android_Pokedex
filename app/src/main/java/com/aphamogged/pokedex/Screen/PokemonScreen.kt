@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -49,32 +50,46 @@ import com.aphamogged.pokedex.Componente.Voltar
 import com.aphamogged.pokedex.Pokemon.PokemonViewModel
 import com.aphamogged.pokedex.R
 import androidx.compose.runtime.LaunchedEffect
+import com.aphamogged.pokedex.Componente.TentatNovamente
+import com.aphamogged.pokedex.Componente.TipoPokemonButton
 import com.aphamogged.pokedex.model.TipoPokemon
 
 @Composable
 fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id : Int) {
 
-    LaunchedEffect(id) {
-        viewModel.buscarPokemon(id.toString())
+    if (viewModel.pokemon == null){
+        LaunchedEffect(id) {
+            viewModel.buscarPokemon(id.toString())
+        }
     }
-
     val pokemon = viewModel.pokemon
 
-
-    if (pokemon == null) {
+    if (viewModel.listaStatus == true && pokemon == null) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }
-    }else{
-        val colorPokemon = TipoPokemon.valueOf("${pokemon.tipos[0].type.name.uppercase()}")
+    }
+    else if(viewModel.listaStatus == false){
+        TentatNovamente(){
+            viewModel.buscarPokemon(id.toString())
+        }
+    }
+    else{
+        var colorPokemon by remember {
+            mutableStateOf<TipoPokemon?>(TipoPokemon.UNKNOWN)
+        }
+        if(pokemon?.tipos != null){
+            colorPokemon =  TipoPokemon.valueOf("${pokemon?.tipos[0]?.type?.name?.uppercase()}")
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(colorPokemon.colorType))
-                .padding(vertical = 30.dp),
+                .safeDrawingPadding()
+                .background(Color(colorPokemon?.colorType ?: TipoPokemon.UNKNOWN.colorType))
+                .padding(vertical = 10.dp),
         ) {
             Box(
                 modifier = Modifier
@@ -106,21 +121,25 @@ fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Voltar(navController)
-                        Text(
-                            text = "${pokemon!!.name}",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight(700),
-                            color = Color.White
-                        )
-
+                        if (pokemon?.name != null){
+                            Text(
+                                text = "${pokemon.name}",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight(700),
+                                color = Color.White
+                            )
+                        }
                     }
-                    Text(
-                        text = "#${pokemon.numero}",
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Start
-                    )
+                    if (pokemon?.numero != null){
+                        Text(
+                            text = "#${pokemon.numero}",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+
                 }
                 Box(
                     modifier = Modifier.fillMaxWidth()
@@ -136,22 +155,26 @@ fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Top
                         ) {
-                            AsyncImage(
-                                model = pokemon.img,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .width(225.dp)
-                                    .zIndex(1f)
-                                    .offset(
-                                        y = -100.dp
-                                    )
-                            )
+                            if (pokemon?.img != null){
+                                AsyncImage(
+                                    model = pokemon!!.img,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(225.dp)
+                                        .zIndex(1f)
+                                        .offset(
+                                            y = -100.dp
+                                        )
+                                )
+                            }
                         }
                     }
                     Box( modifier = Modifier.fillMaxWidth()
-                        .padding(vertical = 50.dp)
+                        .padding(vertical = 35.dp)
                         .zIndex(1f)){
-                        CardInfoPokemon(pokemon,colorPokemon.colorType)
+                        CardInfoPokemon(
+                            pokemon!!,
+                            colorPokemon?.colorType ?: TipoPokemon.UNKNOWN.colorType)
                     }
                 }
             }

@@ -44,9 +44,12 @@ fun Status(pokemon: Pokemon, cor : Long) {
                     .padding(horizontal = 5.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-                pokemon.status.forEach {
-                    NivelAtributo(it.base_stat,cor)
+                if ( pokemon.status != null){
+                    pokemon.status.forEach {
+                        NivelAtributo(it.base_stat,cor)
+                    }
                 }
+
             }
 
         }

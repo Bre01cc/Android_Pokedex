@@ -7,6 +7,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -57,6 +60,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aphamogged.pokedex.Screen.InicioPokedex
 import com.aphamogged.pokedex.Screen.PokemonPokedex
+import com.aphamogged.pokedex.Screen.Regioes
 import com.aphamogged.pokedex.ui.theme.PokedexTheme
 
 class MainActivity : ComponentActivity() {
@@ -69,7 +73,7 @@ class MainActivity : ComponentActivity() {
                   val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = "home"
+                        startDestination = "inicio"
                     ){
                         composable(
                             route = "inicio"
@@ -77,9 +81,16 @@ class MainActivity : ComponentActivity() {
                             InicioPokedex(navController)
                         }
                         composable(
-                            route = "home"
+                            route = "home/{id}",
+                            arguments = listOf(
+                                navArgument("id"){
+                                    type = NavType.StringType
+                                }
+                            )
                         ){
-                          HomePokedex(navController, viewModel = viewModel())
+                            rota ->
+                            val id = rota.arguments?.getString("id")?:"0"
+                          HomePokedex(navController, viewModel = viewModel(), id = id!!)
                         }
                         composable(
                             route = "pokemon/{id}",
@@ -87,11 +98,16 @@ class MainActivity : ComponentActivity() {
                                 navArgument("id"){
                                     type = NavType.IntType
                                 }
-                            )
+                            ),
                         ){
                             rota ->
                             val id = rota.arguments?.getInt("id")?:0
                             PokemonPokedex(navController,viewModel = viewModel(), id = id)
+                        }
+                        composable(
+                            route = "regioes"
+                        ){
+                            Regioes(navController, viewModel = viewModel())
                         }
                     }
                 }

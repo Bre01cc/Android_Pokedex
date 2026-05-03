@@ -24,53 +24,57 @@ import kotlinx.serialization.descriptors.StructureKind
 class PokemonViewModel : ViewModel(){
     private var _pokemons by mutableStateOf(emptyList<Pokemon>())
     val pokemons  get() = _pokemons
-
-
     private var _listaStatus by mutableStateOf(true)
     val listaStatus get() = _listaStatus
+    private var _tentarNovamente by mutableStateOf(false)
 
+    val tentarNovamente get() = _tentarNovamente
     private  var _pokemon by  mutableStateOf<Pokemon?>(null)
 
     val pokemon get() = _pokemon
+
     private var _imgPokemons by mutableStateOf(mutableListOf<String>())
-
-    val imgPokemons get() = _imgPokemons
-
-
-
-    fun listaPokemon(){
+    fun listaPokemon(numero: String){
         viewModelScope.launch {
             try {
-                var response = RetrofitFactory().getPokemonService().getPokemonByRegion("1")
+                if (numero != null && numero.toInt() > 0 && numero != "") {
+                    _listaStatus = true
+                    var response = RetrofitFactory().getPokemonService().getPokemonByRegion(numero)
 
+                if (response != null ) {
 
-                val lista =  response.pokemon_species.map{
-                    async {
-                        val numero = numberPokemon(it.url)
+                    val lista = response.pokemon_species.map {
+                        async {
+                            val numero = numberPokemon(it.url)
 
-                        val pokemon =  buscarDadosPokemon(numero)
-                        Log.e("Teste", pokemon!!.abilities.toString())
-                        Pokemon(
-                            numero = numero,
-                            name = formatarNome(pokemon!!.forms!![0].name) ,
-                            img = pokemon!!.sprites!!.front_default!!,
-                            tipos = pokemon!!.types!!,
-                            status = pokemon!!.stats!!,
-                            weight = formatarNumeroPoke(pokemon!!.weight.toString()),
-                            height = formatarNumeroPoke(pokemon!!.height.toString()),
-                            abilities = pokemon!!.abilities
-                        )
+                            val pokemon = buscarDadosPokemon(numero)
+
+                            Pokemon(
+                                numero = numero,
+                                name = formatarNome(pokemon?.forms[0]?.name ?: ""),
+                                img = pokemon?.sprites?.front_default ?: "",
+                                tipos = pokemon?.types ?: emptyList(),
+                                status = pokemon?.stats ?: emptyList(),
+                                weight = formatarNumeroPoke(pokemon?.weight?.toString() ?: "0"),
+                                height = formatarNumeroPoke(pokemon?.height?.toString() ?: "0"),
+                                abilities = pokemon?.abilities ?: emptyList()
+                            )
+                        }
                     }
+                    _pokemons = lista.awaitAll()
                 }
-                _listaStatus = false
-                _pokemons = lista.awaitAll()
+                }else{
+                    _listaStatus = false
+                }
+
+                Log.e("Estado",listaStatus.toString())
 
             }catch (e : Exception){
+                _listaStatus = false
                 Log.e("Erro", e.message ?: "Erro na requisição da geração")
             }
         }
     }
-
    suspend fun buscarDadosPokemon(numero: String): PokemonResponse?{
         return try {
             RetrofitFactory()
@@ -102,10 +106,22 @@ class PokemonViewModel : ViewModel(){
     fun buscarPokemon(numero: String){
         viewModelScope.launch {
             try {
-//                Log.e("Teste", numero)
+                if (numero != null && numero.toInt() > 0 && numero != ""){
+
+                _listaStatus = true
+
                 var dadosPokemon = buscarDadosPokemon(numero)
+
                 var dadosEspecies = buscarDadosEspecie(numero)
-                _pokemon = Pokemon(
+
+                    if (dadosEspecies != null && dadosPokemon != null){
+
+                    var descricao = formatarDescricao(
+                        dadosEspecies!!
+                            .flavor_text_entries[0]
+                            .flavor_text)
+
+                     _pokemon = Pokemon(
                     name =formatarNome(dadosPokemon!!.forms!![0].name),
                     img = dadosPokemon!!.sprites.front_default,
                     numero = numero,
@@ -114,14 +130,22 @@ class PokemonViewModel : ViewModel(){
                     weight = formatarNumeroPoke(dadosPokemon!!.weight.toString()),
                     height = formatarNumeroPoke(dadosPokemon!!.height.toString()),
                     abilities = dadosPokemon!!.abilities,
-                    pokemonSpecie = dadosEspecies!!
-                )
+                    descricao = descricao
+                     )}
+                }
+                else{
+                    _listaStatus = false
+                }
             }catch (e : Exception){
+                _listaStatus = false
                 Log.e("Teste", e.message ?: "Erro na busca do pokemon")
                 }
             }
-
          }
+
+    fun formatarDescricao(texto : String) : String{
+       return texto.replace("\n", " ").replace("POKéMON","")
+    }
     fun formatarNumeroPoke(numero: String) : String{
         var numeroDecimal = numero.toDouble()/100
         var  numeroFormatado = numeroDecimal.toString().replace(".",",")
@@ -137,7 +161,7 @@ class PokemonViewModel : ViewModel(){
     fun pesquisaPokemon (nome: String) : List<Pokemon>{
          return   _pokemons.filter {
                  pokemon ->
-             pokemon.name.startsWith(nome,ignoreCase = true)
+             pokemon.name!!.startsWith(nome,ignoreCase = true)
     }
     }
 }

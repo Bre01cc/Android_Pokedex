@@ -11,15 +11,15 @@ data class PokemonEspeciesGen (
 
 // dados do pokemon
 data class Pokemon(
-    val name: String,
-    val img: String,
-    val numero: String,
-    val abilities: List<AbilitySlot>,
-    val tipos : List<Types>,
-    val status : List<Status>,
-    val height : String,
-    val weight : String,
-    val pokemonSpecie : PokemonSpecie? = null
+    val name: String? = null,
+    val img: String? = null,
+    val numero: String? = null,
+    val abilities: List<AbilitySlot>? = null,
+    val tipos : List<Types>? = null,
+    val status : List<Status>? = null,
+    val height : String? = null,
+    val weight : String? = null,
+    val descricao : String? = null
 )
 
 data class PokemonSpecie(

@@ -46,18 +46,19 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 35.dp, horizontal = 10.dp),
+                .padding(vertical = 20.dp, horizontal = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                pokemon.tipos.forEach {
-                    var colorPokemon = TipoPokemon.valueOf("${it.type.name.uppercase()}")
+                if (pokemon.tipos != null){
+                    pokemon.tipos!!.forEach {
+                        var colorPokemon = TipoPokemon.valueOf("${it.type.name.uppercase()}")
                         TipoPokemonButton(cor = colorPokemon.colorType, tipo = "${it.type.name}")
+                    }
                 }
-
             }
 
             Text(
@@ -79,10 +80,12 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
                     Row(
                         modifier = Modifier
                     ) {
-                        Text(
-                            text =  "${pokemon.weight}",
-                            color = Color.Black
-                        )
+                        if (pokemon.weight != null){
+                            Text(
+                                text =  "${pokemon.weight}",
+                                color = Color.Black
+                            )
+                        }
                     }
                     Text(
                         text = "Weigtht",
@@ -97,10 +100,12 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row() {
-                        Text(
-                            text = "${pokemon.height}",
-                            color = Color.Black
-                        )
+                        if (pokemon.height !=null){
+                            Text(
+                                text = "${pokemon.height}",
+                                color = Color.Black
+                            )
+                        }
                     }
                     Text(
                         text = "Height",
@@ -115,11 +120,13 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     LazyColumn() {
-                        items(pokemon.abilities) {
-                            Text(
-                                text = "${it.ability.name}",
-                                color = Color.Black
-                            )
+                        if (pokemon.abilities != null){
+                            items(pokemon.abilities) {
+                                Text(
+                                    text = "${it.ability.name}",
+                                    color = Color.Black
+                                )
+                            }
                         }
                     }
 
@@ -132,8 +139,9 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
             }
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "${pokemon.pokemonSpecie!!.flavor_text_entries[0].flavor_text}",
-                color = Color.Black
+                text = "${pokemon.descricao}",
+                color = Color.Black,
+
             )
             Column(
                 modifier = Modifier.weight(0.525F),

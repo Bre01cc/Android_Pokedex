@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -25,6 +26,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -51,7 +54,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.aphamogged.pokedex.Componente.CardPokemon
+import com.aphamogged.pokedex.Componente.Header
 import com.aphamogged.pokedex.Componente.Pokebola
+import com.aphamogged.pokedex.Componente.TentatNovamente
 import com.aphamogged.pokedex.Componente.Voltar
 import com.aphamogged.pokedex.Pokemon.PokemonViewModel
 import com.aphamogged.pokedex.R
@@ -63,91 +68,88 @@ import com.aphamogged.pokedex.service.RetrofitFactory
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
+fun HomePokedex( navController: NavController, viewModel: PokemonViewModel,id : String) {
 
-    var pokemons by remember {
-        mutableStateOf<List<Pokemon?>>(emptyList())
-    }
     var nomePokemon by remember{
         mutableStateOf("")
     }
-    LaunchedEffect(Unit) {
-        viewModel.listaPokemon()
-    }
-        pokemons = viewModel.pokemons
-
-
-    Column(
-        modifier= Modifier.fillMaxSize().background(Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(206, 31, 31, 255))
-                .padding(horizontal = 10.dp, vertical = 35.dp),
-
-            horizontalArrangement = Arrangement.spacedBy(15.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Voltar(navController)
-            Pokebola(35, R.drawable.pokebola, 1F)
-            Text(
-                text = "Pokédex",
-                color = Color.White,
-                fontSize = 32.sp
-            )
+    if (viewModel.pokemons.isEmpty()) {
+        LaunchedEffect(id) {
+            viewModel.listaPokemon(id)
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-                .clip(shape = RoundedCornerShape(10.dp))
-                .border(width = 3.dp, color = Color.Red, shape = RoundedCornerShape(10.dp))
-                .background(Color.White),
-            Arrangement.SpaceBetween
-        ) {
-            OutlinedTextField(
-                modifier = Modifier.weight(2f),
-                value = nomePokemon,
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
+    }
+      val  pokemons = viewModel.pokemons
 
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
-                ),
-                onValueChange = {
-                    nomePokemon = it
-                }
-            )
-            IconButton(
-                onClick = {
-            pokemons = viewModel.pesquisaPokemon(nomePokemon)
-
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Pesquisar pokemon",
-                    tint = Color.Red
-                )
+    // Define a lista que será exibida
+      val listaExibida = if (nomePokemon.trim().isNotEmpty()) {
+             viewModel.pesquisaPokemon(nomePokemon)
+            } else {
+                  pokemons
             }
 
-        }
+    Column(
+        modifier= Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .safeDrawingPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
 
-        if (viewModel.listaStatus) {
+        if (viewModel.listaStatus == true && pokemons.isEmpty()) {
+            Log.e("Estado", viewModel.listaStatus.toString())
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
             }
-        } else {
+        }
+        else if(viewModel.listaStatus == false ){
+            TentatNovamente(){
+                viewModel.listaPokemon(id)
+            }
+        }
+        else {
+            Header(navController)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .border(width = 3.dp, color = Color.Red, shape = RoundedCornerShape(10.dp))
+                    .background(Color.White),
+                Arrangement.SpaceBetween
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier.weight(2f),
+                    value = nomePokemon,
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent
+                    ),
+                    onValueChange = {
+                        nomePokemon = it
+                    }
+                )
+                IconButton(
+                    onClick = {
+//                            pokemons = viewModel.pesquisaPokemon(nomePokemon)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Pesquisar pokemon",
+                        tint = Color.Red
+                    )
+                }
+            }
         LazyVerticalGrid(
             modifier = Modifier.padding(10.dp),
             columns = GridCells.Fixed(2),
@@ -155,11 +157,21 @@ fun HomePokedex( navController: NavController, viewModel: PokemonViewModel) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ){
 
-            items(pokemons.sortedBy { it!!.numero.toInt() }){
-                val colorPokemon = TipoPokemon.valueOf("${it!!.tipos[0].type.name.uppercase()}");
-                CardPokemon(nome = it!!.name,viewModel, numero = it.numero,cor = colorPokemon,img = it.img){
-                    navController.navigate("pokemon/${it.numero}")
+
+            items(listaExibida.filter {
+                it.numero != null
+            }.sortedBy { it.numero?.toInt() }){
+
+                if (!it.tipos.isNullOrEmpty()){
+                val colorPokemon = TipoPokemon.valueOf("${it.tipos[0].type.name.uppercase()}");
+
+                if (it.name != null && it.numero != null && it.img != null){
+                    CardPokemon(nome = it.name,viewModel, numero = it.numero,cor = colorPokemon,img = it.img){
+                        navController.navigate("pokemon/${it.numero}")
+                    }
+                  }
                 }
+
             }
         }
         }
