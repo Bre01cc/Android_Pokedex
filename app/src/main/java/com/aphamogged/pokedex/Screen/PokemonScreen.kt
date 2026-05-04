@@ -50,6 +50,7 @@ import com.aphamogged.pokedex.Componente.Voltar
 import com.aphamogged.pokedex.Pokemon.PokemonViewModel
 import com.aphamogged.pokedex.R
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.focus.focusModifier
 import com.aphamogged.pokedex.Componente.TentatNovamente
 import com.aphamogged.pokedex.Componente.TipoPokemonButton
 import com.aphamogged.pokedex.model.TipoPokemon
@@ -109,14 +110,16 @@ fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id
             }
             Column(
                 modifier = Modifier.padding(vertical = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(50.dp)
+                verticalArrangement = Arrangement.spacedBy(70.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
+
                 ) {
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -139,8 +142,8 @@ fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id
                             textAlign = TextAlign.Start
                         )
                     }
+                    }
 
-                }
                 Box(
                     modifier = Modifier.fillMaxWidth()
                         .padding(10.dp),
@@ -160,10 +163,10 @@ fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id
                                     model = pokemon!!.img,
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .width(225.dp)
+                                        .width(190.dp)
                                         .zIndex(1f)
                                         .offset(
-                                            y = -100.dp
+                                            y = -115.dp
                                         )
                                 )
                             }

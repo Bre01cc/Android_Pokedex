@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -25,7 +26,8 @@ fun NivelAtributo(valor:Int, cor : Long) {
     ) {
         Text(
             text = "$valor",
-            color = Color.Black
+            color = Color.Black,
+            modifier = Modifier.width(30.dp)
         )
         Column(
             modifier = Modifier
@@ -36,7 +38,7 @@ fun NivelAtributo(valor:Int, cor : Long) {
         ) {
             Column(
                 modifier = Modifier
-                    .width(valor.dp)
+                    .fillMaxWidth(valor.toFloat() / 150)
                     .background(Color(cor))
                     .fillMaxHeight()
 
