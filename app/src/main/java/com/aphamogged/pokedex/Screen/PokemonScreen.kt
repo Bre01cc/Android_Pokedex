@@ -119,7 +119,6 @@ fun PokemonPokedex(navController: NavController, viewModel: PokemonViewModel, id
 
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {

@@ -119,7 +119,9 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
                     Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    LazyColumn() {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f)
+                    ) {
                         if (pokemon.abilities != null){
                             items(pokemon.abilities) {
                                 Text(
@@ -140,13 +142,14 @@ fun CardInfoPokemon(pokemon: Pokemon, cor: Long) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = "${pokemon.descricao}",
+                fontSize = 13.sp,
                 color = Color.Black,
 
             )
             Column(
-                modifier = Modifier.weight(0.525F),
+                modifier = Modifier.weight(0.585F),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text =  "Base Stats",
