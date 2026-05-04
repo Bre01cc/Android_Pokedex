@@ -5,7 +5,7 @@
 ## Sobre
 Projeto desenvolvido com o objetivo de aprender, na prática, como realizar e trabalhar com requisições em APIs. A proposta consiste na construção de uma aplicação baseada na [PokeAPI](https://pokeapi.co/), explorando conceitos de consumo de API, manipulação de dados e exibição em interface mobile.
 
-A disciplina foi ministrada pelo professor João Henrique.
+A disciplina foi ministrada pelo professor [João Henrique](https://www.linkedin.com/in/joao-henrique-parizoti-meyer/?locale=pt_BR).
 
 ### Ressalvas
 A aplicação ainda possui alguns bugs conhecidos:
